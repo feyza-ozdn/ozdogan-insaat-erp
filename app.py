@@ -280,7 +280,18 @@ def musteriler():
         ''', (first_name, last_name, email, phone))
         conn.commit()
     
-    # Müşteri silme rotası
+ 
+        
+    # Mevcut müşterileri veritabanından çekip listeleme
+    cur.execute('SELECT id, first_name, last_name, email, phone FROM customers ORDER BY id DESC')
+    musteri_listesi = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    return render_template('musteriler.html', musteriler=musteri_listesi)
+
+   # Müşteri silme rotası
 @app.route('/musteri_sil/<int:id>', methods=['POST'])
 def musteri_sil(id):
     conn = get_db_connection()
@@ -311,15 +322,6 @@ def musteri_sil(id):
         conn.close()
 
     return redirect(url_for('musteriler'))
-        
-    # Mevcut müşterileri veritabanından çekip listeleme
-    cur.execute('SELECT id, first_name, last_name, email, phone FROM customers ORDER BY id DESC')
-    musteri_listesi = cur.fetchall()
-    
-    cur.close()
-    conn.close()
-    
-    return render_template('musteriler.html', musteriler=musteri_listesi)
 
 
 if __name__ == '__main__':
