@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnşaat ERP - Şantiyeler</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; overflow-x: hidden; }
+        .sidebar { width: 260px; height: 100vh; background-color: #212529; padding-top: 30px; color: white; flex-shrink: 0; }
+        .sidebar .brand { font-size: 1.5rem; font-weight: bold; text-align: center; margin-bottom: 30px; color: #f8f9fa; letter-spacing: 1px; }
+        .sidebar a { color: #adb5bd; text-decoration: none; padding: 12px 20px; display: block; border-radius: 8px; margin: 5px 15px; font-weight: 500; transition: 0.3s ease; }
+        .sidebar a:hover, .sidebar a.active { background-color: #0d6efd; color: white; }
+        .main-content { padding: 40px; height: 100vh; overflow-y: auto; width: 100%; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+<div class="d-flex">
+    <div class="sidebar">
+        <div class="brand">🏗️ ÖZDOĞAN İNŞAAT</div>
+        <a href="/">💸 Gelir/Gider Ekle</a>
+        <a href="/islemler">📊 Finansal Raporlar</a>
+        <a href="/projeler" class="active">🏗️ Şantiyeler</a>
+        <a href="/musteriler">👥 Müşteriler</a>
+        <a href="/logout" class="text-danger mt-4" style="border-top: 1px solid #444; padding-top: 15px;">🚪 Çıkış Yap</a>
+    </div>
+    <div class="main-content flex-grow-1">
+        <div class="container" style="max-width: 900px;">
+            <h2 class="mb-4 text-info fw-bold">Şantiye (Proje) Yönetimi</h2>
+            
+            <div class="card p-4 mb-4">
+                <h5 class="mb-3 text-secondary">Yeni Şantiye Ekle</h5>
+                <form method="POST" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Şantiye Adı:</label>
+                        <input type="text" name="name" class="form-control" placeholder="Örn: Serdivan Villaları" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Konum (İl/İlçe):</label>
+                        <input type="text" name="location" class="form-control" placeholder="Örn: Sakarya / Serdivan">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Başlangıç Tarihi:</label>
+                        <input type="date" name="start_date" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Durum:</label>
+                        <select name="status" class="form-select">
+                            <option value="Plan Aşamasında">Plan Aşamasında</option>
+                            <option value="Devam Ediyor" selected>Devam Ediyor</option>
+                            <option value="Tamamlandı">Tamamlandı</option>
+                            <option value="Durduruldu">Durduruldu</option>
+                        </select>
+                    </div>
+                    <div class="col-12 text-end mt-3">
+                        <button type="submit" class="btn btn-info text-white px-4">Şantiyeyi Kaydet</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card p-4">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr><th>ID</th><th>Şantiye Adı</th><th>Konum</th><th>Başlangıç Tarihi</th><th>Durum</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for proje in projeler %}
+                        <tr>
+                            <td>#{{ proje[0] }}</td>
+                            <td class="fw-bold">{{ proje[1] }}</td>
+                            <td>{{ proje[2] }}</td>
+                            <td>{{ proje[3] }}</td>
+                            <td><span class="badge bg-secondary">{{ proje[4] }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="5" class="text-center text-muted p-4">Kayıtlı şantiye bulunmuyor.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
