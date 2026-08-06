@@ -57,7 +57,7 @@
             <div class="card p-4">
                 <table class="table table-hover align-middle">
                     <thead class="table-dark">
-                        <tr><th>ID</th><th>Ad</th><th>Soyad</th><th>E-posta</th><th>Telefon</th></tr>
+                        <tr><th>ID</th><th>Ad</th><th>Soyad</th><th>E-posta</th><th>Telefon</th><th>İşlem</th></tr>
                     </thead>
                     <tbody>
                         {% for musteri in musteriler %}
@@ -67,6 +67,18 @@
                             <td class="fw-bold">{{ musteri[2] }}</td>
                             <td>{{ musteri[3] if musteri[3] else '-' }}</td>
                             <td>{{ musteri[4] if musteri[4] else '-' }}</td>
+
+                             <td>
+                                <form method="POST"
+                                      action="{{ url_for('musteri_sil', id=musteri[0]) }}"
+                                      onsubmit="return confirm('Bu müşteriyi silmek istediğinize emin misiniz?');">
+
+                                   <button type="submit" class="btn btn-danger btn-sm">
+                                       🗑️ Sil
+                                   </button>
+
+                                 </form>
+                             </td>
                         </tr>
                         {% else %}
                         <tr><td colspan="5" class="text-center text-muted p-4">Kayıtlı müşteri bulunmuyor.</td></tr>

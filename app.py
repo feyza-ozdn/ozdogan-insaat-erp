@@ -279,6 +279,38 @@ def musteriler():
             VALUES (%s, %s, %s, %s)
         ''', (first_name, last_name, email, phone))
         conn.commit()
+    
+    # Müşteri silme rotası
+@app.route('/musteri_sil/<int:id>', methods=['POST'])
+def musteri_sil(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+        # Müşteriye bağlı işlemleri silmiyoruz.
+        # Sadece müşteri bağlantısını kaldırıyoruz.
+        cur.execute(
+            'UPDATE transactions SET customer_id = NULL WHERE customer_id = %s',
+            (id,)
+        )
+
+        # Müşteriyi sil
+        cur.execute(
+            'DELETE FROM customers WHERE id = %s',
+            (id,)
+        )
+
+        conn.commit()
+
+    except Exception:
+        conn.rollback()
+        raise
+
+    finally:
+        cur.close()
+        conn.close()
+
+    return redirect(url_for('musteriler'))
         
     # Mevcut müşterileri veritabanından çekip listeleme
     cur.execute('SELECT id, first_name, last_name, email, phone FROM customers ORDER BY id DESC')
@@ -288,6 +320,7 @@ def musteriler():
     conn.close()
     
     return render_template('musteriler.html', musteriler=musteri_listesi)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
