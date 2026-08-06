@@ -25,6 +25,50 @@ def get_db_connection():
     )
     return conn
 
+def init_db():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    # Kullanıcılar tablosu
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(50) UNIQUE NOT NULL,
+            password VARCHAR(100) NOT NULL
+        );
+    """)
+    
+    # Varsayılan yönetici kullanıcısını ekle (Şifre: 1234)
+    cur.execute("""
+        INSERT INTO users (username, password) 
+        VALUES ('feyza', '1234') 
+        ON CONFLICT (username) DO NOTHING;
+    """)
+    
+    # Eğer başka tabloların varsa (musteriler, projeler vb.) buraya ekleyebilirsin:
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS musteriler (
+            id SERIAL PRIMARY KEY,
+            ad_soyad VARCHAR(100),
+            telefon VARCHAR(50)
+        );
+    """)
+    
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS islemler (
+            id SERIAL PRIMARY KEY,
+            baslik VARCHAR(100),
+            tutar NUMERIC
+        );
+    """)
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+
+# Flask uygulaması ayağa kalkarken veya ilk istekte bu fonksiyonu çalıştır
+init_db()
+
 # Güvenlik Kontrolü: Giriş yapmayan hiç kimse sayfaları göremez!
 @app.before_request
 def require_login():
