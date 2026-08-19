@@ -702,17 +702,7 @@ def ekle():
     cur.close()
     conn.close()
 
-    return """
-    <h1>İşlem Başarıyla Kaydedildi!</h1>
-    <br>
-    <a href="/islemler">
-        Finansal Raporlara Git
-    </a>
-    <br><br>
-    <a href="/">
-        Yeni İşlem Ekle
-    </a>
-    """
+    return redirect(url_for('index', basarili='1'))
 
 
 # =========================================================
