@@ -62,7 +62,7 @@
             <div class="card p-4">
                 <table class="table table-hover align-middle">
                     <thead class="table-dark">
-                        <tr><th>ID</th><th>Şantiye Adı</th><th>Konum</th><th>Başlangıç Tarihi</th><th>Durum</th></tr>
+                        <tr><th>ID</th><th>Şantiye Adı</th><th>Konum</th><th>Başlangıç Tarihi</th><th>Durum</th><th>İşlem</th></tr>
                     </thead>
                     <tbody>
                         {% for proje in projeler %}
@@ -72,9 +72,20 @@
                             <td>{{ proje[2] }}</td>
                             <td>{{ proje[3] }}</td>
                             <td><span class="badge bg-secondary">{{ proje[4] }}</span></td>
+                            <td>
+                                <form action="/proje_sil/{{ proje[0] }}" method="POST" style="margin: 0;">
+                                  <button
+                                      type="submit"
+                                      class="btn btn-sm btn-outline-danger"
+                                      onclick="return confirm('Bu şantiyeyi silmek istediğinize emin misiniz? Bağlı finansal kayıtlar silinmeyecek.');"
+                                  >
+                                      Sil
+                                  </button>
+                                </form>
+                            </td>
                         </tr>
                         {% else %}
-                        <tr><td colspan="5" class="text-center text-muted p-4">Kayıtlı şantiye bulunmuyor.</td></tr>
+                        <tr><td colspan="6" class="text-center text-muted p-4">Kayıtlı şantiye bulunmuyor.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
