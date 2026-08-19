@@ -53,9 +53,9 @@
                                     {% elif islem[4] == 'EUR' %} 1 EUR = {{ islem[6] }} TL
                                     {% else %} - {% endif %}
                                 </td>
-                                <td class="fw-bold" style="white-space: nowrap;">{{ islem[7] }} TL</td>
+                                <td class="fw-bold" style="white-space: nowrap;">{{ islem[8] }} TL</td>
                                 <td>
-                                    <form action="/islem_sil/{{ islem[8] }}" method="POST" style="margin:0;">
+                                    <form action="/islem_sil/{{ islem[12] }}" method="POST" style="margin:0;">
                                         <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Kalıcı olarak silmek istediğinize emin misiniz?');">Sil</button>
                                     </form>
                                 </td>
