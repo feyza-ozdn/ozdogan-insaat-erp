@@ -16,6 +16,40 @@
         .main-content { padding: 40px; height: 100vh; overflow-y: auto; flex-grow: 1; min-width: 0; }
         
         .card { border: none; border-radius: 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .report-table {
+            width: 100%;
+            min-width: 1250px;
+        }
+
+        .report-table th {
+            white-space: nowrap;
+            vertical-align: middle;
+            padding: 16px 14px;
+        }
+
+         .report-table td {
+            vertical-align: middle;
+            padding: 16px 14px;
+        }
+
+         .report-table .kur-bilgisi {
+            min-width: 200px;
+            line-height: 1.7;
+        }
+
+        .report-table .tutar {
+           white-space: nowrap;
+        }
+
+        .report-table .islem-kolon {
+           width: 80px;
+           text-align: center;
+           white-space: nowrap;
+        }
+
+        .table-responsive {
+           overflow-x: auto;
+        }
     </style>
 </head>
 <body>
@@ -29,56 +63,124 @@
         <a href="/logout" class="text-danger mt-4" style="border-top: 1px solid #444; padding-top: 15px;">🚪 Çıkış Yap</a>
     </div>
     <div class="main-content">
-        <div class="container" style="max-width: 1000px;">
+        <div class="container-fluid" style="max-width: 1700px;">
             <h2 class="mb-4 text-success fw-bold">Finansal İşlemler Raporu</h2>
             <div class="card p-4">
                 
                 <!-- GÜNCELLENDİ: Tabloyu table-responsive div'i içine aldık -->
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Tarih</th><th>Tür</th><th>Kategori</th><th>Orijinal Tutar</th><th>İşlem Günü Kurları</th><th>TL</th><th>USD</th><th>EUR</th><th>Altın</th><th>İşlem</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for islem in islemler %}
-                            <tr>
-                                <td>{{ islem[0] }}</td>
-                                <td><span class="badge {% if islem[1] == 'GELIR' %}bg-success{% else %}bg-danger{% endif %}">{{ islem[1] }}</span></td>
-                                <td>{{ islem[2] }}</td>
-                                <td style="white-space: nowrap;">{{ islem[3] }} {{ islem[4] }}</td>
-                               <td class="text-muted small" style="white-space: nowrap;">
-                                   <div>1 USD = {{ "%.4f"|format(islem[5]|float) }} TL</div>
-                                   <div>1 EUR = {{ "%.4f"|format(islem[6]|float) }} TL</div>
-                                   <div>1 gr Altın = {{ "%.2f"|format(islem[7]|float) }} TL</div>
-                               </td>
-                                <td class="fw-bold" style="white-space: nowrap;">
-                                    {{ "%.2f"|format(islem[8]|float) }} TL
-                                </td>
 
-                                <td style="white-space: nowrap;">
-                                    {{ "%.2f"|format(islem[9]|float) }} USD
-                                </td>
+    <table class="table table-hover align-middle mb-0 report-table">
 
-                                <td style="white-space: nowrap;">
-                                    {{ "%.2f"|format(islem[10]|float) }} EUR
-                                </td>
+        <thead class="table-dark">
+            <tr>
+                <th>Tarih</th>
+                <th>Tür</th>
+                <th>Kategori</th>
+                <th>Orijinal Tutar</th>
+                <th>İşlem Günü Kurları</th>
+                <th>TL</th>
+                <th>USD</th>
+                <th>EUR</th>
+                <th>Altın</th>
+                <th class="islem-kolon">İşlem</th>
+            </tr>
+        </thead>
 
-                                <td style="white-space: nowrap;">
-                                    {{ "%.4f"|format(islem[11]|float) }} gr
-                                </td>
-                                    <form action="/islem_sil/{{ islem[12] }}" method="POST" style="margin:0;">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Kalıcı olarak silmek istediğinize emin misiniz?');">Sil</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr><td colspan="10" class="text-center text-muted p-4">Henüz finansal işlem bulunmuyor.</td></tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        <tbody>
+
+            {% for islem in islemler %}
+
+            <tr>
+
+                <td style="white-space: nowrap;">
+                    {{ islem[0] }}
+                </td>
+
+                <td>
+                    <span class="badge {% if islem[1] == 'GELIR' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ islem[1] }}
+                    </span>
+                </td>
+
+                <td>
+                    {{ islem[2] }}
+                </td>
+
+                <td class="tutar">
+                    {{ islem[3] }} {{ islem[4] }}
+                </td>
+
+                <td class="text-muted small kur-bilgisi">
+                    <div>
+                        1 USD = {{ "%.4f"|format(islem[5]|float) }} TL
+                    </div>
+
+                    <div>
+                        1 EUR = {{ "%.4f"|format(islem[6]|float) }} TL
+                    </div>
+
+                    <div>
+                        1 gr Altın = {{ "%.2f"|format(islem[7]|float) }} TL
+                    </div>
+                </td>
+
+                <td class="fw-bold tutar">
+                    {{ "%.2f"|format(islem[8]|float) }} TL
+                </td>
+
+                <td class="tutar">
+                    {{ "%.2f"|format(islem[9]|float) }} USD
+                </td>
+
+                <td class="tutar">
+                    {{ "%.2f"|format(islem[10]|float) }} EUR
+                </td>
+
+                <td class="tutar">
+                    {{ "%.4f"|format(islem[11]|float) }} gr
+                </td>
+
+                <td class="islem-kolon">
+
+                    <form
+                        action="/islem_sil/{{ islem[12] }}"
+                        method="POST"
+                        style="margin: 0;"
+                    >
+
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('Kalıcı olarak silmek istediğinize emin misiniz?');"
+                        >
+                            Sil
+                        </button>
+
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% else %}
+
+            <tr>
+                <td
+                    colspan="10"
+                    class="text-center text-muted p-4"
+                >
+                    Henüz finansal işlem bulunmuyor.
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
                 <!-- table-responsive bitişi -->
                 
             </div>
