@@ -50,11 +50,83 @@
         .table-responsive {
            overflow-x: auto;
         }
+        .sidebar {
+    width: 260px;
+    height: 100vh;
+    background-color: #212529;
+    padding-top: 30px;
+    color: white;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.menu-toggle {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 1100;
+    border: none;
+    background-color: #212529;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 22px;
+}
+
+.sidebar-overlay {
+    display: none;
+}
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1050;
+        transform: translateX(-100%);
+        box-shadow: 5px 0 20px rgba(0,0,0,0.2);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.45);
+        z-index: 1040;
+    }
+
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    .main-content {
+        width: 100%;
+        padding: 70px 15px 20px 15px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+}
     </style>
 </head>
 <body>
+    <button class="menu-toggle" id="menuToggle" type="button">
+    ☰
+    </button>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <div class="d-flex">
-    <div class="sidebar">
+    <div class="sidebar" id="sidebar">
         <div class="brand">🏗️ ÖZDOĞAN İNŞAAT</div>
         <a href="/">💸 Gelir/Gider Ekle</a>
         <a href="/islemler" class="active">📊 Finansal Raporlar</a>
@@ -187,5 +259,32 @@
         </div>
     </div>
 </div>
+
+    <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+    menuToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+    });
+
+    sidebarOverlay.addEventListener('click', function () {
+        sidebar.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+    });
+
+    const menuLinks = sidebar.querySelectorAll('a');
+
+    menuLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            }
+        });
+    });
+</script>
 </body>
 </html>
