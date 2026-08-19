@@ -851,6 +851,56 @@ def projeler():
         projeler=projeler_listesi
     )
 
+# =========================================================
+# 13. ŞANTİYE / PROJE SİL
+# =========================================================
+
+@app.route(
+    '/proje_sil/<int:id>',
+    methods=['POST']
+)
+def proje_sil(id):
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    try:
+
+        # Bu şantiyeye bağlı finansal işlemleri silme.
+        # Sadece şantiye bağlantısını kaldır.
+        cur.execute(
+            '''
+            UPDATE transactions
+            SET project_id = NULL
+            WHERE project_id = %s
+            ''',
+            (id,)
+        )
+
+        # Şantiyeyi sil
+        cur.execute(
+            '''
+            DELETE FROM projects
+            WHERE id = %s
+            ''',
+            (id,)
+        )
+
+        conn.commit()
+
+    except Exception:
+
+        conn.rollback()
+        raise
+
+    finally:
+
+        cur.close()
+        conn.close()
+
+    return redirect(
+        url_for('projeler')
+    )
 
 # =========================================================
 # 13. MÜŞTERİLER
