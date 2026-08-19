@@ -955,17 +955,51 @@ def musteriler():
         conn.commit()
 
     cur.execute(
-        '''
-        SELECT
-            id,
-            first_name,
-            last_name,
-            email,
-            phone
-        FROM customers
-        ORDER BY id DESC
-        '''
-    )
+    '''
+    SELECT
+        c.id,
+        c.first_name,
+        c.last_name,
+        c.email,
+        c.phone,
+
+        COALESCE(
+            SUM(
+                CASE
+                    WHEN t.transaction_type = 'GELIR'
+                    THEN t.amount_try
+                    ELSE 0
+                END
+            ),
+            0
+        ) AS alacak,
+
+        COALESCE(
+            SUM(
+                CASE
+                    WHEN t.transaction_type = 'GIDER'
+                    THEN t.amount_try
+                    ELSE 0
+                END
+            ),
+            0
+        ) AS verecek
+
+    FROM customers c
+
+    LEFT JOIN transactions t
+        ON t.customer_id = c.id
+
+    GROUP BY
+        c.id,
+        c.first_name,
+        c.last_name,
+        c.email,
+        c.phone
+
+    ORDER BY c.id DESC
+    '''
+)
 
     musteri_listesi = cur.fetchall()
 
