@@ -559,7 +559,7 @@ def ekle():
     # TL
     # -----------------------------------------------------
 
-    if para_birimi == 'TL':
+    if para_birimi == 'TRY':
 
         amount_try = tutar
 
