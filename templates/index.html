@@ -58,6 +58,27 @@
 </head>
 <body>
 
+    {% if request.args.get('basarili') == '1' %}
+
+<div class="alert alert-success d-flex justify-content-between align-items-center shadow-sm mb-4"
+     role="alert"
+     style="border-radius: 12px;">
+
+    <div>
+        <strong>İşlem başarıyla kaydedildi.</strong>
+        <div class="small mt-1">
+            Gelir/gider kaydı sisteme eklendi.
+        </div>
+    </div>
+
+    <a href="/islemler" class="btn btn-success">
+        Finansal Raporlara Git
+    </a>
+
+</div>
+
+{% endif %}
+
 <div class="d-flex">
     
     <!-- 1. SÜTUN: Sol Menü (Sabit Genişlik) -->
